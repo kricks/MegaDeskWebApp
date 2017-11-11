@@ -1,9 +1,34 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@{ 
+    Page.Title = "Add a Quote";
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Mega Desk</title>
+    <meta charset="utf-8" />
+    <title>MegaDesk</title>
 </head>
 <body>
-    <p>Welcome to Mega Desk!</p>
+    <h2>MegaDesk Quotes</h2>
+
+    <form method="get" action="~/AddQuote.cshtml"
+          <div>
+              <input type="Submit" value="Add New Quote" /><br />
+    </form>
+    </div>
+
+    <form method="get" action="~/ViewQuote.cshtml"
+          <div>
+            <input type="Submit" value="View Quotes" /><br />
+    </form>
+    </div>
+
+    <form method="get" action="~/SearchQuote.cshtml"
+          <div>
+            <input type="Submit" value="Search Quotes" /><br />
+    </form>
+    </div>
+
 </body>
 </html>

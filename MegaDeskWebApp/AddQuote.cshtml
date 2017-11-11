@@ -1,9 +1,231 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@{ 
+    Page.Title = "Add a Quote";
+
+    Validation.RequireField("name", "You must enter your name");
+    Validation.RequireField("width", "You must enter the width");
+    Validation.RequireField("depth", "You must enter the depth");
+    //Validation.RequireField("drawers", "You must enter the number of drawers");
+    //Validation.RequireField("material", "You must enter the material");
+    //Validation.RequireField("shipping", "You must select");
+
+    var name = "";
+    var width = "";
+    var depth = "";
+    var drawers = "";
+    var material = "";
+    var shipping = "";
+    float price = -1;
+    var date = "";
+
+    if (IsPost && Validation.IsValid())
+    {
+        name = Request.Form["name"];
+        date = DateTime.Now.ToString();
+        width = Request.Form["width"];
+        depth = Request.Form["depth"];
+        drawers = Request.Form["drawers"];
+        material = Request.Form["material"];
+        shipping = Request.Form["shipping"];
+        price = calculateQuotePrice(float.Parse(width),
+            float.Parse(depth),
+            int.Parse(drawers),
+            material,
+            shipping);
+
+        //var db = DataBase.Open("Megadesk");
+        //var insertCommand = "INSERT INTO DeskQuote (Name, Date, Width, Depth, Drawers, Material, Shipping, Price) VALUES(@0, @1, @2, @3, @4, @5, @6, @7)";
+        //db.Execute(insertCommand, name, date, width, depth, drawers, material, shipping, price);
+
+        Response.Redirect("~/DisplayQuote.cshtml");
+    }
+
+    float calculateQuotePrice(float cWidth,
+        float cDepth,
+        int cDrawers,
+        string cMaterial,
+        string cShipping)
+    {
+        int basePrice = 200;
+        float drawerPrice = calculateDrawerPrice(cDrawers);
+        float surfaceArea = calculateSurfaceArea(cWidth, cDepth);
+        float surfaceAreaPrice = calculateSurfaceAreaPrice(surfaceArea);
+        float surfaceMaterialPrice = calculateSurfaceMaterialPrice(cMaterial);
+        float shippingPrice = calculateShippingPrice(cShipping, surfaceArea);
+
+        float quotePrice = (drawerPrice
+             + surfaceAreaPrice
+             + surfaceMaterialPrice
+             + shippingPrice
+             + basePrice);
+
+        return quotePrice;
+    }
+
+    float calculateDrawerPrice(int cDrawers)
+    {
+        int costPerDrawer = 50;
+        int cost = (costPerDrawer * cDrawers);
+
+        return cost;
+    }
+    float calculateSurfaceArea(float cWidth, float cDepth)
+    {
+        float area = (cWidth * cDepth);
+        return area;
+    }
+    float calculateSurfaceAreaPrice(float surfaceArea)
+    {
+        float cost;
+
+        if (surfaceArea <= 1000)
+        {
+            cost = 0;
+        }
+        else
+        {
+            cost = (surfaceArea - 1000);
+        }
+        return cost;
+    }
+
+    float calculateSurfaceMaterialPrice(string cMaterial)
+    {
+        int cost;
+        switch (cMaterial)
+        {
+            case "Oak":
+                cost = 200;
+                return cost;
+            case "Laminate":
+                cost = 100;
+                return cost;
+            case "Pine":
+                cost = 50;
+                return cost;
+            case "Rosewood":
+                cost = 300;
+                return cost;
+            case "Veneer":
+                cost = 125;
+                return cost;
+            default:
+                cost = 0;
+                return cost;
+        }
+    }
+
+    float calculateShippingPrice(string cShipping, float surfaceArea)
+    {
+        int cost;
+
+        switch (cShipping)
+        {
+            case "3 Day":
+                if (surfaceArea < 1000)
+                {
+                    cost = 60;
+                    return cost;
+                }
+                else if (surfaceArea >= 1000 && surfaceArea <= 2000)
+                {
+                    cost = 70;
+                    return cost;
+                }
+                else
+                {
+                    cost = 80;
+                    return cost;
+                }
+            case "5 Day":
+                if (surfaceArea < 1000)
+                {
+                    cost = 40;
+                    return cost;
+                }
+                else if (surfaceArea >= 1000 && surfaceArea <= 2000)
+                {
+                    cost = 50;
+                    return cost;
+                }
+                else
+                {
+                    cost = 60;
+                    return cost;
+                }
+            case "7 Day":
+                if (surfaceArea < 1000)
+                {
+                    cost = 30;
+                    return cost;
+                }
+                else if (surfaceArea >= 1000 && surfaceArea <= 2000)
+                {
+                    cost = 35;
+                    return cost;
+                }
+                else
+                {
+                    cost = 40;
+                    return cost;
+                }
+            default:
+                cost = 0;
+                return cost;
+        }
+
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title></title>
+    <meta charset="utf-8" />
+    <title>Add Quote</title>
 </head>
 <body>
+    <h2>New Desk Quote</h2>
 
+    <form method="post">
+        <fieldset>
+            <legend>Desk Specifications</legend>
+            <p>
+                <label for="name">Name: </label>
+                <input type="text" name="name" value="@Request.Form["name"]" />
+                @Html.ValidationMessage("name")
+            </p>
+
+            <p>
+                <label for="width">Width: </label>
+                <input type="text" name="width" value="@Request.Form["width"]" />
+                @Html.ValidationMessage("width")
+            </p>
+
+            <p>
+                <label for="depth">Depth: </label>
+                <input type="text" name="depth" value="@Request.Form["depth"]" />
+                @Html.ValidationMessage("depth")
+            </p>
+
+            <p>
+                <label for="drawers">Drawers: </label>
+                <input type="text" name="drawers" value="@Request.Form["depth"]" />
+                @Html.ValidationMessage("drawers")
+            </p>
+
+            <p>
+                <label for="material">Material: </label>
+                <input type="text" name="material" value="@Request.Form["material"]" />
+                @Html.ValidationMessage("material")
+            </p>
+
+            <p>
+                <label for="shipping">Shipping: </label>
+                <input type="text" name="shipping" value="@Request.Form["shipping"]" />
+                @Html.ValidationMessage("shipping")
+            </p>
+
+            <p><input type="submit" name="buttonSubmit" value="Submit" /></p>
+        </fieldset>
+    </form>
 </body>
 </html>
