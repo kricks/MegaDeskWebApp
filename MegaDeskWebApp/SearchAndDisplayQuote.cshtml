@@ -3,7 +3,10 @@
     Page.Title = "Mega Desk";
 
     var db = WebMatrix.Data.Database.Open("MegaDesk");
-    var selectCommand = "SELECT * FROM MyScriptureJournal";
+    var selectCommand = "SELECT * FROM MegaDesk";
+
+
+    
     var searchTerm = "";
 
     if (!Request.QueryString["searchBook"].IsEmpty())
@@ -20,6 +23,8 @@
 
     var selectedData = db.Query(selectCommand, searchTerm);
     var grid = new WebGrid(source: selectedData, defaultSort: "Book", rowsPerPage: 5);
+       
+    
 }
 
 
