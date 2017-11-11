@@ -1,14 +1,17 @@
 ﻿@{ 
     Page.Title = "Add a Quote";
 
-    Validation.RequireField("name", "You must enter your name");
+    Validation.RequireField("firstName", "You must enter your first name");
+    Validation.RequireField("lastName", "You must enter your last name");
     Validation.RequireField("width", "You must enter the width");
     Validation.RequireField("depth", "You must enter the depth");
+    Validation.RequireField("deskNumber", "You must enter the number of desks");
     //Validation.RequireField("drawers", "You must enter the number of drawers");
     //Validation.RequireField("material", "You must enter the material");
     //Validation.RequireField("shipping", "You must select");
 
-    var name = "";
+    var firstName = "";
+    var lastName = "";
     var width = "";
     var depth = "";
     var drawers = "";
@@ -16,16 +19,19 @@
     var shipping = "";
     float price = -1;
     var date = "";
+    var deskNumber = "";
 
     if (IsPost && Validation.IsValid())
     {
-        name = Request.Form["name"];
+        firstName = Request.Form["firstName"];
+        lastName = Request.Form["lastName"];
         date = DateTime.Now.ToString();
         width = Request.Form["width"];
         depth = Request.Form["depth"];
         drawers = Request.Form["drawers"];
         material = Request.Form["material"];
         shipping = Request.Form["shipping"];
+        deskNumber = Request.Form["deskNumber"];
         price = calculateQuotePrice(float.Parse(width),
             float.Parse(depth),
             int.Parse(drawers),
@@ -33,8 +39,12 @@
             shipping);
 
         var db = WebMatrix.Data.Database.Open("MegaDesk");
-        //var insertCommand = "INSERT INTO DeskQuote (Name, Date, Width, Depth, Drawers, Material, Shipping, Price) VALUES(@0, @1, @2, @3, @4, @5, @6, @7)";
-        //db.Execute(insertCommand, name, date, width, depth, drawers, material, shipping, price);
+        var insertCommand1 = "INSERT INTO Desk (Width, Depth, Drawer_num, surface_material, Price) VALUES(@0, @1, @2, @3, @4)";
+        var insertCommand2 = "INSERT INTO Order (Shipping, desk_num, order_total) VALUES(@0, @1, @2)";
+        var insertCommand3 = "INSERT INTO Customer (First_Name, Last_Name) VALUES(@0, @1)";
+        db.Execute(insertCommand1, width, depth, drawers, material, price.ToString());
+       // db.Execute(insertCommand2, shipping, deskNumber, price.ToString());
+        db.Execute(insertCommand3, firstName, lastName);
 
         Response.Redirect("~/DisplayQuote.cshtml");
     }
@@ -189,9 +199,15 @@
         <fieldset>
             <legend>Desk Specifications</legend>
             <p>
-                <label for="name">Name: </label>
-                <input type="text" name="name" value="@Request.Form["name"]" />
-                @Html.ValidationMessage("name")
+                <label for="firstName">First Name: </label>
+                <input type="text" name="firstName" value="@Request.Form["firstName"]" />
+                @Html.ValidationMessage("firstName")
+            </p>
+
+            <p>
+                <label for="lastName">Last Name: </label>
+                <input type="text" name="lastName" value="@Request.Form["lastName"]" />
+                @Html.ValidationMessage("lastName")
             </p>
 
             <p>
@@ -222,6 +238,12 @@
                 <label for="shipping">Shipping: </label>
                 <input type="text" name="shipping" value="@Request.Form["shipping"]" />
                 @Html.ValidationMessage("shipping")
+            </p>
+
+            <p>
+                <label for="deskNumber">Number of Desks: </label>
+                <input type="text" name="deskNumber" value="@Request.Form["deskNumber"]" />
+                @Html.ValidationMessage("deskNumber")
             </p>
 
             <p><input type="submit" name="buttonSubmit" value="Submit" /></p>
