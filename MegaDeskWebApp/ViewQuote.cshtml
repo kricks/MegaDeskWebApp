@@ -1,12 +1,4 @@
-﻿@{
-    Page.Title = "Add a Quote";
-
-    var db = WebMatrix.Data.Database.Open("MegaDesk");
-    
-
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -14,28 +6,5 @@
 </head>
 <body>
     <h2>View Quotes</h2>
-    <div>
-        @*@grid.GetHtml(
-           tableStyle: "grid",
-            headerStyle: "head",
-            alternatingRowStyle: "alt",
-            columns: grid.Columns(
-                grid.Column("First_Name"),
-                grid.Column("Last_Name"),
-                grid.Column("date"),
-                grid.Column("Width"),
-                grid.Column("Depth"),
-                grid.Column("drawer_num"),
-                grid.Column("material"),
-                grid.Column("shipping"),
-                grid.Column("price")
-                )*@
-        )
-    </div>
-    <p>
-        <a href="~/MegaDeskHome.cshtml">Main Menu</a>
-    </p>
-
-
 </body>
 </html>
