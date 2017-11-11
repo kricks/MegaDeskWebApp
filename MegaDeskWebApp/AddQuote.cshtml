@@ -1,5 +1,6 @@
 ﻿@{ 
-    Page.Title = "Add a Quote";
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Add Quote";
 
     Validation.RequireField("firstName", "You must enter your first name");
     Validation.RequireField("lastName", "You must enter your last name");
@@ -43,7 +44,7 @@
         var insertCommand2 = "INSERT INTO Order (Shipping, desk_num, order_total) VALUES(@0, @1, @2)";
         var insertCommand3 = "INSERT INTO Customer (First_Name, Last_Name) VALUES(@0, @1)";
         db.Execute(insertCommand1, width, depth, drawers, material, price.ToString());
-       // db.Execute(insertCommand2, shipping, deskNumber, price.ToString());
+        // db.Execute(insertCommand2, shipping, deskNumber, price.ToString());
         db.Execute(insertCommand3, firstName, lastName);
 
         Response.Redirect("~/DisplayQuote.cshtml");

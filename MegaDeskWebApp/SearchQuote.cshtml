@@ -1,20 +1,59 @@
 ﻿@{
-    Page.Title = "Add a Quote";
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Mega Desk";
 
+    var db = WebMatrix.Data.Database.Open("MegaDesk");
+    var selectCommand = "SELECT * FROM MyScriptureJournal";
+    var searchTerm = "";
+
+    if (!Request.QueryString["searchBook"].IsEmpty())
+    {
+        selectCommand = "SELECT * FROM MyScriptureJournal WHERE Book = @0";
+        searchTerm = Request.QueryString["searchBook"];
+    }
+
+    if (!Request.QueryString["searchBook"].IsEmpty())
+    {
+        selectCommand = "SELECT * FROM MyScriptureJournal WHERE Note LIKE @0";
+        searchTerm = "%" + Request.QueryString["searchNote"] + "%";
+    }
+
+    var selectedData = db.Query(selectCommand, searchTerm);
+    var grid = new WebGrid(source: selectedData, defaultSort: "Book", rowsPerPage: 5);
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Search Quote</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
-    <h2>Search Quote</h2>
 
-</body>
-</html>
+<h2>Mega Desk</h2>
+<form method="get">
+    <div>
+        <label for="searchScripture">Mega Desk:</label>
+        <input type="text" name="searchScripture" value="@Request.QueryString["searchBook"]" />
+        <input type="Submit" value="Search Scripture" /><br />
+        (Leave blank to list all scripture.)<br />
+    </div>
+    <br />
+    <div>
+        <label for="SearchChapter">Scripture contains the following:</label>
+        <input type="text" name="searchChapter" value="@Request.QueryString["searchChapter"]" />
+        <input type="Submit" value="Search Chapter" /><br />
+    </div>
+    <br />
+</form>
+
+<div>
+    @grid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "head",
+        alternatingRowStyle: "alt",
+        columns: grid.Columns(
+    grid.Column(format: @<a href="~/EditScripture?id=@item.ID">Edit</a>),
+    grid.Column("Book"),
+    grid.Column("Chapter"),
+    grid.Column("Verse"),
+    grid.Column("Note"),
+    grid.Column("Date"),
+    grid.Column(format: @<a href="~/DeleteScripture?id=@item.ID">Delete</a>)
+        )
+    )
+</div>
+<p><a href="~/AddScripture">Add a new scripture</a></p>
