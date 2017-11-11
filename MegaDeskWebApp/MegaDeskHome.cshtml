@@ -4,17 +4,7 @@
 
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>MegaDesk</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
+
     <h2>MegaDesk Quotes</h2>
 
     <form method="get" action="~/AddQuote.cshtml">
@@ -22,17 +12,25 @@
             <input type="Submit" class="btn" value="Add New Quote" /><br />
         </div>
     </form>
-
-    <form method="get" action="~/ViewQuote.cshtml">
+    <br />
+    <form method="get" action="~/ViewSearchQuote.cshtml">
         <div>
-            <input type="Submit" class="btn" value="View Quotes" /><br />
+            <input type="Submit" class="btn" value="View and Search Quotes" /><br />
         </div>
     </form>   
-
-    <form method="get" action="~/SearchQuote.cshtml">
+    <br />
+    <form method="get" action="~/EditQuote.cshtml">
         <div>
-            <input type="Submit" class="btn" value="Search Quotes" /><br />
+            <input type="Submit" class="btn" value="Edit Quotes" /><br />
         </div>
     </form>  
+    <br />
+    <form method="get" action="~/DeleteQuote.cshtml">
+        <div>
+            <input type="Submit" class="btn" value="Delete Quotes" /><br />
+        </div>
+    </form>  
+
+
 </body>
 </html>
