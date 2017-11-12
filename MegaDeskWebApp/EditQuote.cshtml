@@ -1,7 +1,203 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
-    Page.Title = "Edit Quote";
+    Page.Title = "Edit a Quote";
 
+    var firstName = "";
+    var lastName = "";
+    var width = "";
+    var depth = "";
+    var numberOfDrawers = "";
+    var material = "";
+    var shipping = "";
+    var price = "";
+    var Id = "";
+    var deskNum = "";
+    var orderTotal = "";
+    var date = "";
+
+    if (!IsPost)
+    {
+        if (!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
+        {
+            Id = Request.QueryString["Id"];
+            var db = WebMatrix.Data.Database.Open("MegaDesk");
+            var dbCommand1 = "SELECT * FROM Desk WHERE Id = @0";
+            var dbCommand2 = "SELECT * FROM Order WHERE Id = @0";
+            var dbCommand3 = "SELECT * FROM Customer WHERE Id = @0";
+
+
+            var deskRow = db.QuerySingle(dbCommand1, Id);
+            if (deskRow != null)
+            {
+                width = deskRow.width;
+                depth = deskRow.depth;
+                numberOfDrawers = deskRow.drawer_num;
+                material = deskRow.surface_material;
+                price = deskRow.price;
+            }
+            else
+            {
+                Validation.AddFormError("No Desk was selected.");
+
+            }
+
+            var orderRow = db.QuerySingle(dbCommand2, Id);
+            if (orderRow != null)
+            {
+                shipping = orderRow.shipping;
+                deskNum = orderRow.desk_num;
+                orderTotal = orderRow.order_total;
+                date = orderRow.Date;
+            }
+            else
+            {
+                Validation.AddFormError("No Order was found with that ID.");
+            }
+
+            var customerRow = db.QuerySingle(dbCommand3, Id);
+            if (customerRow != null)
+            {
+                firstName = customerRow.first_name;
+                lastName = customerRow.last_name;
+            }
+            else
+            {
+                Validation.AddFormError("No Customer was found with that ID.");
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No Quote was selected.");
+
+        }
+    }
+
+    if (IsPost)
+    {
+        Validation.RequireField("firstName", "You must enter a title");
+        Validation.RequireField("lastName", "Genre is required");
+
+        Validation.RequireField("width", "You haven't entered a year");
+        Validation.RequireField("depth", "You must enter a title");
+
+        Validation.RequireField("numberOfDrawers", "Genre is required");
+        Validation.RequireField("material", "You haven't entered a year");
+
+        Validation.RequireField("shipping", "You must enter a title");
+        Validation.RequireField("deskNum", "Genre is required");
+
+        Validation.RequireField("orderTotal", "You must enter a title");
+        Validation.RequireField("date", "Genre is required");
+
+        Validation.RequireField("Id", "No movie ID was submitted!");
+
+        firstName = Request.Form["firstName"];
+        lastName = Request.Form["lastName"];
+
+        width = Request.Form["width"];
+        depth = Request.Form["depth"];
+
+        numberOfDrawers = Request.Form["numberOfDrawers"];
+        material = Request.Form["material"];
+
+        shipping = Request.Form["shipping"];
+        deskNum = Request.Form["deskNum"];
+
+        orderTotal = Request.Form["orderTotal"];
+        date = Request.Form["date"];
+
+        Id = Request.Form["Id"];
+
+        if (Validation.IsValid())
+        {
+            var db = Database.Open("MegaDesk");
+            var updateCommand = "UPDATE Customer SET first_name=@0, last_name=@1 WHERE Id=@2";
+            db.Execute(updateCommand, firstName, lastName, Id);
+            Response.Redirect("~/MegaDeskHome");
+        }
+
+        if (Validation.IsValid())
+        {
+            var db = Database.Open("MegaDesk");
+            var updateCommand = "UPDATE Desk SET width=@0, depth=@1, drawer_num=@2, surface_material=@3, price=@4 WHERE Id=@5";
+            db.Execute(updateCommand, width, depth, numberOfDrawers, material, price, Id);
+            Response.Redirect("~/MegaDeskHome");
+        }
+
+        if (Validation.IsValid())
+        {
+            var db = Database.Open("MegaDesk");
+            var updateCommand = "UPDATE Order SET shipping=@0, desk_num=@1, order_total=@2, Date=@3 WHERE Id=@4";
+            db.Execute(updateCommand, shipping, numberOfDrawers, orderTotal, date, Id);
+            Response.Redirect("~/MegaDeskHome");
+        }
+    }
 }
 
-<h2>Edit Quote</h2>
+<h2>Edit a Quote</h2>
+@Html.ValidationSummary()
+<form method="post">
+    <fieldset>
+        <legend>Quote Information</legend>
+
+        <p>
+            <label for="firstName">First Name:</label>
+            <input type="text" name="firstName" value="@firstName" />
+        </p>
+
+        <p>
+            <label for="lastName">Last Name:</label>
+            <input type="text" name="lastName" value="@lastName" />
+        </p>
+
+        <p>
+            <label for="width">Width:</label>
+            <input type="text" name="width" value="@width" />
+        </p>
+
+        <p>
+            <label for="depth">Depth:</label>
+            <input type="text" name="depth" value="@depth" />
+        </p>
+
+        <p>
+            <label for="numberOfDrawers">Number Of Drawers:</label>
+            <input type="text" name="numberOfDrawers" value="@numberOfDrawers" />
+        </p>
+
+        <p>
+            <label for="material">Surface Material:</label>
+            <input type="text" name="material" value="@material" />
+        </p>
+
+        <p>
+            <label for="price">Price:</label>
+            <input type="text" name="price" value="@price" />
+        </p>
+
+        <p>
+            <label for="shipping">Shipping:</label>
+            <input type="text" name="shipping" value="@shipping" />
+        </p>
+
+        <p>
+            <label for="deskNum">Number of Desks:</label>
+            <input type="text" name="deskNum" value="@deskNum" />
+        </p>
+
+        <p>
+            <label for="orderTotal">Order Total:</label>
+            <input type="text" name="orderTotal" value="@orderTotal" />
+        </p>
+
+        <p>
+            <label for="date">Date:</label>
+            <input type="text" name="date" value="@date" />
+        </p>
+
+        <input type="hidden" name="movieid" value="@Id" />
+
+        <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
+    </fieldset>
+</form>
+<p><a href="~/MegaDeskHome">Return to Mega Desk Home Page</a></p>

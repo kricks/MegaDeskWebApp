@@ -40,9 +40,9 @@
             shipping);
 
         var db = WebMatrix.Data.Database.Open("MegaDesk");
-        var insertCommand1 = "INSERT INTO Desk (Width, Depth, Drawer_num, surface_material, Price) VALUES(@0, @1, @2, @3, @4)";
-        var insertCommand2 = "INSERT INTO Order (Shipping, desk_num, order_total) VALUES(@0, @1, @2)";
-        var insertCommand3 = "INSERT INTO Customer (First_Name, Last_Name) VALUES(@0, @1)";
+        var insertCommand1 = "INSERT INTO Desk (width, depth, drawer_num, surface_material, price) VALUES(@0, @1, @2, @3, @4)";
+        var insertCommand2 = "INSERT INTO Order (shipping, desk_num, order_total) VALUES(@0, @1, @2)";
+        var insertCommand3 = "INSERT INTO Customer (first_name, last_name) VALUES(@0, @1)";
         db.Execute(insertCommand1, width, depth, drawers, material, price.ToString());
         // db.Execute(insertCommand2, shipping, deskNumber, price.ToString());
         db.Execute(insertCommand3, firstName, lastName);
@@ -187,17 +187,6 @@
     }
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Add Quote</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
     <h2>New Desk Quote</h2>
 
     <form method="post">
@@ -254,5 +243,4 @@
             <p><input type="submit" name="buttonSubmit" value="Submit" /></p>
         </fieldset>
     </form>
-</body>
-</html>
+

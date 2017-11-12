@@ -3,44 +3,44 @@
     Page.Title = "Mega Desk";
 
     var db = WebMatrix.Data.Database.Open("MegaDesk");
-    var selectCommand = "SELECT * FROM MegaDesk";
+    var selectCommand = "SELECT * FROM Customer";
 
 
-    
+
     var searchTerm = "";
 
-    if (!Request.QueryString["searchBook"].IsEmpty())
+    if (!Request.QueryString["searchfirst_name"].IsEmpty())
     {
-        selectCommand = "SELECT * FROM MyScriptureJournal WHERE Book = @0";
-        searchTerm = Request.QueryString["searchBook"];
+        selectCommand = "SELECT * FROM MegaDesk WHERE first_name = @0";
+        searchTerm = Request.QueryString["searchfirst_name"];
     }
 
-    if (!Request.QueryString["searchBook"].IsEmpty())
+    if (!Request.QueryString["searchlast_name"].IsEmpty())
     {
-        selectCommand = "SELECT * FROM MyScriptureJournal WHERE Note LIKE @0";
-        searchTerm = "%" + Request.QueryString["searchNote"] + "%";
+        selectCommand = "SELECT * FROM MegaDesk WHERE last_name LIKE @0";
+        searchTerm = "%" + Request.QueryString["searchlast_name"] + "%";
     }
 
     var selectedData = db.Query(selectCommand, searchTerm);
-    var grid = new WebGrid(source: selectedData, defaultSort: "Book", rowsPerPage: 5);
-       
-    
+    var grid = new WebGrid(source: selectedData, defaultSort: "first_name", rowsPerPage: 5);
+
+
 }
 
 
 <h2>Mega Desk</h2>
 <form method="get">
     <div>
-        <label for="searchScripture">Mega Desk:</label>
-        <input type="text" name="searchScripture" value="@Request.QueryString["searchBook"]" />
-        <input type="Submit" value="Search Scripture" /><br />
-        (Leave blank to list all scripture.)<br />
+        <label for="searchfirst_name">First Names contains the following::</label>
+        <input type="text" name="searchfirst_name" value="@Request.QueryString["searchfirst_name"]" />
+        <input type="Submit" value="Search first_name" /><br />
+        (Leave blank to list all First Names.)<br />
     </div>
     <br />
     <div>
-        <label for="SearchChapter">Scripture contains the following:</label>
-        <input type="text" name="searchChapter" value="@Request.QueryString["searchChapter"]" />
-        <input type="Submit" value="Search Chapter" /><br />
+        <label for="searchlast_name">Last Names contains the following:</label>
+        <input type="text" name="searchlast_name" value="@Request.QueryString["searchlast_name"]" />
+        <input type="Submit" value="Search last_name" /><br />
     </div>
     <br />
 </form>
@@ -51,14 +51,11 @@
         headerStyle: "head",
         alternatingRowStyle: "alt",
         columns: grid.Columns(
-    grid.Column(format: @<a href="~/EditScripture?id=@item.ID">Edit</a>),
-    grid.Column("Book"),
-    grid.Column("Chapter"),
-    grid.Column("Verse"),
-    grid.Column("Note"),
-    grid.Column("Date"),
-    grid.Column(format: @<a href="~/DeleteScripture?id=@item.ID">Delete</a>)
+    grid.Column(format: @<a href="~/EditQuote?id=@item.ID">Edit</a>),
+    grid.Column("first_name"),
+    grid.Column("last_name"),
+    grid.Column(format: @<a href="~/DeleteQuote?id=@item.ID">Delete</a>)
         )
     )
 </div>
-<p><a href="~/AddScripture">Add a new scripture</a></p>
+<p><a href="~/AddQuote">Add a new quote</a></p>
