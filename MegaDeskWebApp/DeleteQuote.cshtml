@@ -2,6 +2,105 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = "Delete Quote";
 
+    var name = "";
+    var width = "";
+    var depth = "";
+    var numberOfDrawers = "";
+    var material = "";
+    var shipping = "";
+    var price = "";
+    var Id = "";
+    var deskNum = "";
+
+    if (!IsPost)
+    {
+        if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
+        {
+            Id = Request.QueryString["Id"];
+            var db = Database.Open("MegaDesk");
+            var dbCommand = "SELECT * FROM DeskQuotes WHERE Id = @0";
+            var row = db.QuerySingle(dbCommand, Id);
+            if (row != null)
+            {
+                name = row.Customer;
+                width = row.Width.ToString();
+                depth = row.Depth.ToString();
+                numberOfDrawers = row.Drawers.ToString();
+                material = row.Material;
+                shipping = row.Shipping;
+                price = row.Price;
+                deskNum = row.Number.ToString();
+            }
+            else
+            {
+                Validation.AddFormError("No quote was found with that ID.");
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No quote was found with that ID.");
+        }
+    }
+
+    if (IsPost && !Request["buttonDelete"].IsEmpty())
+    {
+        Id = Request.Form["Id"];
+        var db = Database.Open("MegaDesk");
+        var deleteCommand = "DELETE FROM DeskQuotes WHERE Id = @0";
+        db.Execute(deleteCommand, Id);
+        Response.Redirect("~/ViewSearchQuote");
+    }
 }
 
 <h2>Delete Quote</h2>
+@Html.ValidationSummary()
+<p><a href="~/ViewSearchQuote.cshtml">Return to all quotes</a></p>
+
+<form method="post">
+    <fieldset>
+        <legend>Quote Information</legend>
+
+        <p>
+            <span>Name:</span>
+            <span>@name</span>
+        </p>
+
+        <p>
+            <span>Width:</span>
+            <span>@width</span>
+        </p>
+
+        <p>
+            <span>Depth:</span>
+            <span>@depth</span>
+        </p>
+
+        <p>
+            <span>Number of Drawers:</span>
+            <span>@numberOfDrawers</span>
+        </p>
+
+        <p>
+            <span>Material:</span>
+            <span>@material</span>
+        </p>
+
+        <p>
+            <span>Shipping:</span>
+            <span>@shipping</span>
+        </p>
+
+        <p>
+            <span>Price:</span>
+            <span>@price</span>
+        </p>
+
+        <p>
+            <span>Number of Desks:</span>
+            <span>@deskNum</span>
+        </p>
+
+        <input type="hidden" name="id" value="@Id" />
+        <p><input type="submit" name="buttonDelete" value="Delete Quote" /></p>
+    </fieldset>
+</form>

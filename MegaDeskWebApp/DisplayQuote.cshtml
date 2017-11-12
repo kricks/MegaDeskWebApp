@@ -2,77 +2,78 @@
     Layout = "~/_Layout.cshtml";
     Page.Title = "Add a Quote";
 
-    var firstName = "";
-    var lastName = "";
-    var width = "";
-    var depth = "";
-    var numberOfDrawers = "";
-    var material = "";
-    var shipping = "";
-    var price = "";
-    var Id = "";
-    var deskNum = "";
+    //var firstName = "";
+    //var lastName = "";
+    //var width = "";
+    //var depth = "";
+    //var numberOfDrawers = "";
+    //var material = "";
+    //var shipping = "";
+    //var price = "";
+    //var Id = "";
+    //var deskNum = "";
 
-    if (!IsPost)
-    {
-        if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
-        {
-            Id = Request.QueryString["Id"];
-            var db = WebMatrix.Data.Database.Open("MegaDesk");
-            var dbCommand1 = "SELECT * FROM Desk WHERE Id = @0";
-            var dbCommand2 = "SELECT * FROM Order WHERE Id = @0";
-            var dbCommand3 = "SELECT * FROM Customer WHERE Id = @0";
+    //if (!IsPost)
+    //{
+    //    if (!Request.QueryString["Id"].IsEmpty() && Request.QueryString["Id"].IsInt())
+    //    {
+    //        Id = Request.QueryString["Id"];
+    //        var db = WebMatrix.Data.Database.Open("MegaDesk");
+    //        var dbCommand1 = "SELECT * FROM Desk WHERE Id = @0";
+    //        var dbCommand2 = "SELECT * FROM Order WHERE Id = @0";
+    //        var dbCommand3 = "SELECT * FROM Customer WHERE Id = @0";
 
-            var deskRow = db.QuerySingle(dbCommand1, Id);
-            if (deskRow != null)
-            {
-                width = deskRow.width;
-                depth = deskRow.depth;
-                numberOfDrawers = deskRow.drawer_num;
-                material = deskRow.surface_material;
-                price = deskRow.price;
-            }
-            else
-            {
-                Validation.AddFormError("No quote was found with that ID.");
-            }
+    //        var deskRow = db.QuerySingle(dbCommand1, Id);
+    //        if (deskRow != null)
+    //        {
+    //            width = deskRow.width;
+    //            depth = deskRow.depth;
+    //            numberOfDrawers = deskRow.drawer_num;
+    //            material = deskRow.surface_material;
+    //            price = deskRow.price;
+    //        }
+    //        else
+    //        {
+    //            Validation.AddFormError("No quote was found with that ID.");
+    //        }
 
-            var orderRow = db.QuerySingle(dbCommand2, Id);
-            if (orderRow != null)
-            {
-                shipping = orderRow.shipping;
-                deskNum = orderRow.desk_num;
-            }
-            else
-            {
-                Validation.AddFormError("No quote was found with that ID.");
-            }
+    //        var orderRow = db.QuerySingle(dbCommand2, Id);
+    //        if (orderRow != null)
+    //        {
+    //            shipping = orderRow.shipping;
+    //            deskNum = orderRow.desk_num;
+    //        }
+    //        else
+    //        {
+    //            Validation.AddFormError("No quote was found with that ID.");
+    //        }
 
-            var customerRow = db.QuerySingle(dbCommand3, Id);
-            if (customerRow != null)
-            {
-                firstName = customerRow.first_name;
-                lastName = customerRow.last_name;
-            }
-            else
-            {
-                Validation.AddFormError("No quote was found with that ID.");
-            }
+    //        var customerRow = db.QuerySingle(dbCommand3, Id);
+    //        if (customerRow != null)
+    //        {
+    //            firstName = customerRow.first_name;
+    //            lastName = customerRow.last_name;
+    //        }
+    //        else
+    //        {
+    //            Validation.AddFormError("No quote was found with that ID.");
+    //        }
 
-        }
-        else
-        {
-            Validation.AddFormError("No quote was found with that ID.");
-        }
-    }
+    //    }
+    //    else
+    //    {
+    //        Validation.AddFormError("No quote was found with that ID.");
+    //    }
+    //}
 }
 
 
     <h2>Display Quote</h2>
-    @Html.ValidationSummary()
+    @*@Html.ValidationSummary()*@
+<h3>You've submitted the quote.</h3>
     <p><a href="~/MegaDeskHome.cshtml">Return to Main Menu</a></p>
 
-    <form method="post">
+    @*<form method="post">
         <fieldset>
             <legend>Your Order</legend>
 
@@ -121,5 +122,6 @@
                 <span>@deskNum</span>
             </p>
 
-        </fieldset>
+        </fieldset>*@
+
     </form>
